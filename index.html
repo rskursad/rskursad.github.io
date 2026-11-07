@@ -3,106 +3,1997 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kürşad ARAS - App Developer</title>
+    <title>TabuKA — Yeni Nesil Yapay Zekâ Destekli Tabu & Kelime Oyunu</title>
+    <meta name="description" content="TabuKA; cihaz içi sesli yapay zekâ hakemi, 2.300+ güncel kelimesi, 13 zengin kategorisi ve çevrimdışı moduyla arkadaş ortamlarının vazgeçilmez kelime anlatma oyunu. Google Play'de yayında!">
+    <meta name="keywords" content="Tabu, Tabu oyunu, TabuKA, kelime oyunu, parti oyunu, yapay zeka hakem, çevrimdışı tabu, Android tabu">
+    <meta name="author" content="Kürşad ARAS">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://play.google.com/store/apps/details?id=com.tabuka.arena">
+    <meta property="og:title" content="TabuKA — Yeni Nesil Yapay Zekâ Destekli Tabu Oyunu">
+    <meta property="og:description" content="Yapay zekâ sesli hakemi, 2.300+ kelimesi ve 13 kategorisiyle TabuKA Google Play'de yayında!">
+    <meta property="og:image" content="./Assets/Store/feature_graphic_1024x500.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./Assets/logo-mark.png">
+    <link rel="apple-touch-icon" href="./Assets/logo-mark.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body {
+        :root {
+            --bg-dark: #090711;
+            --bg-surface: #120E22;
+            --bg-card: #18142C;
+            --bg-card-subtle: #201A3A;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A5A0C2;
+            --text-muted: #736E92;
+
+            /* TabuKA Brand Palette */
+            --brand-flame-1: #FF2D55;
+            --brand-flame-2: #FF6B4A;
+            --brand-purple: #8B5CF6;
+            --brand-purple-light: #C4B5FD;
+            --brand-green: #10B981;
+            --brand-green-glow: rgba(16, 185, 129, 0.3);
+            --brand-amber: #F59E0B;
+            --brand-red: #EF4444;
+            --brand-red-glow: rgba(239, 68, 68, 0.35);
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --radius-full: 9999px;
+
+            --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(255, 45, 85, 0.25);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Blobs */
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-1 {
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, var(--brand-flame-1) 0%, var(--brand-purple) 70%);
+        }
+        .glow-2 {
+            top: 900px;
+            left: -150px;
+            background: radial-gradient(circle, var(--brand-purple) 0%, transparent 70%);
+        }
+        .glow-3 {
+            top: 2200px;
+            right: -150px;
+            background: radial-gradient(circle, var(--brand-flame-2) 0%, transparent 70%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Utilities */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--brand-flame-1) 0%, var(--brand-flame-2) 60%, #FFA86B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline;
+        }
+        .purple-gradient-text {
+            background: linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline;
+        }
+
+        /* Top Navbar */
+        .navbar-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            background: rgba(9, 7, 17, 0.75);
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 74px;
+        }
+
+        .brand-logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(255, 45, 85, 0.35);
+            transition: transform 0.3s ease;
+        }
+        .brand-logo-group:hover .brand-icon {
+            transform: scale(1.06) rotate(-2deg);
+        }
+        .brand-name {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-playstore-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--brand-flame-1), var(--brand-flame-2));
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.3);
+            transition: var(--transition);
+        }
+        .btn-playstore-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 45, 85, 0.45);
+        }
+
+        /* Mobile Hamburger */
+        .mobile-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+        }
+        .mobile-toggle svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 70px 0 60px;
+            position: relative;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .hero-announcement {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 10px #10B981;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .hero-title {
+            font-size: 52px;
+            line-height: 1.12;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            margin-bottom: 22px;
+        }
+        .hero-lead {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 34px;
+            max-width: 560px;
+        }
+        .hero-lead strong {
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        /* Google Play Official Style Button */
+        .btn-google-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 45, 85, 0.2);
+            transition: var(--transition);
+        }
+        .btn-google-play:hover {
+            transform: translateY(-3px);
+            border-color: var(--brand-flame-1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 45, 85, 0.35);
+        }
+        .btn-google-play svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+        .btn-google-play .btn-sub {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9CA3AF;
+            display: block;
+            line-height: 1.2;
+        }
+        .btn-google-play .btn-main {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .hero-trust-bar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 22px;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .trust-item strong {
+            color: #FFFFFF;
+        }
+
+        /* Interactive Live Tabu Card Showcase */
+        .hero-showcase {
+            position: relative;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
-        .card {
-            background: #1e1e1e;
-            padding: 40px;
+
+        .interactive-card-wrapper {
+            width: 100%;
+            max-width: 390px;
+            background: linear-gradient(180deg, #1A1530 0%, #120E22 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 28px;
+            padding: 24px 22px;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), var(--shadow-glow);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        .interactive-card-wrapper:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Card Top Header */
+        .card-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+        .category-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: var(--brand-purple-light);
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .score-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .score-pill span {
+            color: #10B981;
+            font-weight: 800;
+        }
+
+        /* Circular Timer Ring */
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            position: relative;
+        }
+        .timer-svg {
+            width: 78px;
+            height: 78px;
+            transform: rotate(-90deg);
+        }
+        .timer-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 6;
+        }
+        .timer-progress {
+            fill: none;
+            stroke: var(--brand-flame-1);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 213;
+            stroke-dashoffset: 40;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+        }
+        .timer-seconds {
+            position: absolute;
+            font-size: 22px;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+
+        /* Main Word Container */
+        .main-word-box {
+            background: linear-gradient(135deg, rgba(255, 45, 85, 0.15) 0%, rgba(255, 107, 74, 0.15) 100%);
+            border: 1px solid rgba(255, 45, 85, 0.35);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .main-word-box::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+        .main-word-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand-flame-2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .main-word-text {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+
+        /* Forbidden Words List */
+        .forbidden-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            margin-bottom: 22px;
+        }
+        .forbidden-word {
+            background: rgba(255, 42, 85, 0.06);
+            border: 1px solid rgba(255, 42, 85, 0.2);
+            color: #FFA4B8;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.3px;
+            position: relative;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .forbidden-word:hover {
+            background: rgba(255, 42, 85, 0.12);
+            transform: scale(1.02);
+        }
+
+        /* Interactive Gameplay Buttons */
+        .game-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .btn-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 6px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 400px;
-            width: 85%;
+            border: none;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            gap: 4px;
+        }
+        .btn-game svg {
+            width: 20px;
+            height: 20px;
+        }
+        .btn-correct {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            box-shadow: 0 4px 12px var(--brand-green-glow);
+        }
+        .btn-correct:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--brand-green-glow);
+        }
+        .btn-taboo {
+            background: linear-gradient(135deg, #FF2A55, #DC2626);
+            color: white;
+            box-shadow: 0 4px 12px var(--brand-red-glow);
+        }
+        .btn-taboo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--brand-red-glow);
+        }
+        .btn-pass {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .btn-pass:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+        }
+        .btn-game:active {
+            transform: scale(0.95);
+        }
+
+        .demo-hint {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Flash feedback animations on card */
+        .flash-correct {
+            animation: flashGreen 0.4s ease;
+        }
+        .flash-taboo {
+            animation: flashRed 0.4s ease;
+        }
+        @keyframes flashGreen {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.12); }
+            50% { border-color: #10B981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
+        }
+        @keyframes flashRed {
+            0%, 100% { border-color: rgba(255, 255, 255, 0.12); }
+            50% { border-color: #EF4444; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
+        }
+
+        /* Stats Strip */
+        .stats-section {
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(18, 14, 34, 0.4);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
             text-align: center;
         }
-        h1 {
-            margin: 0 0 5px 0;
-            color: #4CAF50;
-            font-size: 26px;
-            letter-spacing: 1px;
+        .stat-card {
+            padding: 14px;
         }
-        .subtitle {
-            color: #888;
-            font-size: 15px;
-            margin-bottom: 30px;
-        }
-        .projects {
-            text-align: left;
-            margin-top: 20px;
-        }
-        .projects h2 {
-            font-size: 16px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 8px;
-            color: #ccc;
-        }
-        .project-item {
-            margin: 15px 0;
-            padding: 12px;
-            background: #2a2a2a;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-            transition: transform 0.2s;
-        }
-        .project-item:hover {
-            transform: translateX(5px);
-        }
-        .project-item strong {
-            display: block;
-            color: #fff;
-            font-size: 16px;
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
             margin-bottom: 4px;
         }
-        .project-item span {
+        .stat-label {
             font-size: 13px;
-            color: #aaa;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 100px 0;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 60px;
+        }
+        .section-tag {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--brand-flame-1);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .section-title {
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+        .feature-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 34px 28px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-box:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-card);
+        }
+        .feature-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--brand-flame-1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .feature-box:hover::before {
+            opacity: 1;
+        }
+        .feature-icon-wrapper {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            font-size: 26px;
+        }
+        .icon-flame {
+            background: rgba(255, 45, 85, 0.12);
+            color: var(--brand-flame-1);
+            border: 1px solid rgba(255, 45, 85, 0.25);
+        }
+        .icon-purple {
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--brand-purple);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+        .icon-green {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--brand-green);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+        .icon-amber {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--brand-amber);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+        .icon-blue {
+            background: rgba(14, 165, 233, 0.12);
+            color: #0EA5E9;
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+        .icon-pink {
+            background: rgba(236, 72, 153, 0.12);
+            color: #EC4899;
+            border: 1px solid rgba(236, 72, 153, 0.25);
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+        .feature-desc {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* How to Play Section */
+        .rules-section {
+            padding: 100px 0;
+        }
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 50px;
+        }
+        .rule-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 36px 30px;
+            position: relative;
+        }
+        .step-number {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--brand-flame-1), var(--brand-flame-2));
+            color: white;
+            font-size: 20px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.35);
+        }
+        .rule-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .rule-desc {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Categories Section */
+        .categories-section {
+            padding: 90px 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .categories-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            max-width: 960px;
+            margin: 40px auto 0;
+        }
+        .cat-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            cursor: default;
+        }
+        .cat-chip:hover {
+            border-color: var(--brand-flame-1);
+            background: rgba(255, 45, 85, 0.08);
+            transform: translateY(-2px);
+        }
+        .cat-chip span.emoji {
+            font-size: 18px;
+        }
+        .cat-chip .count {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+
+        /* Store Status & Reviews Section */
+        .reviews-section {
+            padding: 90px 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #110D24 100%);
+            border-top: 1px solid var(--border);
+        }
+        .store-info-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1.25fr;
+            gap: 32px;
+            margin-top: 45px;
+            align-items: stretch;
+        }
+        .store-data-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 45, 85, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 45, 85, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .store-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .store-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.35);
+        }
+        .store-app-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+        .store-app-dev {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .store-live-badge {
+            margin-left: auto;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .store-metrics-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 24px 0;
+            text-align: center;
+        }
+        .store-metric-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 6px;
+        }
+        .store-metric-val {
+            font-size: 20px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+        .store-metric-lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .store-notice-box {
+            display: flex;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+        .notice-icon {
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .community-reviews-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .review-quote-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px 22px;
+            transition: var(--transition);
+        }
+        .review-quote-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+        .quote-stars {
+            color: #FBBF24;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .quote-text {
+            font-size: 14px;
+            color: #E2E8F0;
+            line-height: 1.55;
+            margin-bottom: 14px;
+            font-style: italic;
+        }
+        .quote-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quote-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand-flame-1), var(--brand-purple));
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .author-role {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Big Download CTA */
+        .cta-section {
+            padding: 100px 0;
+        }
+        .cta-banner {
+            background: radial-gradient(circle at top right, rgba(255, 45, 85, 0.25), transparent 60%),
+                        linear-gradient(135deg, #1A1435 0%, #120D25 100%);
+            border: 1px solid rgba(255, 45, 85, 0.35);
+            border-radius: 32px;
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 25px 60px -10px rgba(0,0,0,0.7), 0 0 50px rgba(255, 45, 85, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            bottom: -50px; left: -50px;
+            width: 250px; height: 250px;
+            background: var(--brand-purple);
+            filter: blur(100px);
+            opacity: 0.25;
+            pointer-events: none;
+        }
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        .cta-title {
+            font-size: 40px;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+        .cta-text {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 520px;
+            line-height: 1.6;
+        }
+        .cta-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .cta-qr-box {
+            position: relative;
+            z-index: 2;
+            background: rgba(9, 7, 17, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-image-wrapper {
+            background: white;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            margin-bottom: 14px;
+        }
+        .qr-image-wrapper img {
+            width: 160px;
+            height: 160px;
+            display: block;
+        }
+        .qr-caption {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 2px;
+        }
+        .qr-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 90px 0;
+            border-top: 1px solid var(--border);
+        }
+        .faq-accordion {
+            max-width: 800px;
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .faq-item:hover {
+            border-color: var(--border-hover);
+        }
+        .faq-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+            color: var(--brand-flame-1);
+            flex-shrink: 0;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 24px;
+            color: var(--text-secondary);
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+        .faq-item.active .faq-content {
+            max-height: 300px;
+            padding-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #06040C;
+            border-top: 1px solid var(--border);
+            padding: 60px 0 30px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 380px;
+            margin-top: 14px;
+            line-height: 1.6;
+        }
+        .footer-col h4 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 18px;
+            letter-spacing: -0.2px;
         }
         .footer-links {
-            margin-top: 30px;
+            list-style: none;
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
         }
         .footer-links a {
-            color: #4CAF50;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 13px;
-            transition: color 0.2s;
+            font-size: 14px;
+            transition: color 0.2s ease;
         }
         .footer-links a:hover {
-            color: #81C784;
-            text-decoration: underline;
+            color: var(--brand-flame-1);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .footer-bottom a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .footer-bottom a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Mobile Drawer */
+        .mobile-drawer {
+            position: fixed;
+            top: 74px;
+            left: 0;
+            width: 100%;
+            background: rgba(9, 7, 17, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 24px;
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            z-index: 99;
+        }
+        .mobile-drawer.open {
+            display: flex;
+        }
+        .mobile-drawer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 8px 0;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 44px; }
+            .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero-showcase { order: -1; }
+            .interactive-card-wrapper { max-width: 420px; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+            .store-info-grid { grid-template-columns: 1fr; }
+            .cta-banner { grid-template-columns: 1fr; padding: 40px 30px; text-align: center; }
+            .cta-content { display: flex; flex-direction: column; align-items: center; }
+            .cta-text { margin-left: auto; margin-right: auto; }
+            .cta-actions { justify-content: center; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .btn-playstore-nav { display: none; }
+            .mobile-toggle { display: block; }
+            .hero-title { font-size: 34px; letter-spacing: -0.5px; }
+            .hero-lead { font-size: 16px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .rules-grid { grid-template-columns: 1fr; }
+                        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .store-metrics-row { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Kürşad ARAS</h1>
-        <div class="subtitle">Software Developer | Mobile & Desktop Apps</div>
 
-        <div class="projects">
-            <h2>Öne Çıkan Uygulamalar</h2>
-            <div class="project-item">
-                <strong>TabuKA - Kelime Arenası</strong>
-                <span>Çok platformlu Türkçe parti oyunu.</span>
+    <!-- Ambient Glow Backgrounds -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="brand-logo-group">
+                    <img src="./Assets/logo-mark.png" alt="TabuKA Logo" class="brand-icon">
+                    <span class="brand-name gradient-text">TabuKA</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="#features">Özellikler</a></li>
+                    <li><a href="#how-to-play">Nasıl Oynanır?</a></li>
+                    <li><a href="#categories">Kategoriler</a></li>
+                                        <li><a href="#reviews">Mağaza & Yorumlar</a></li>
+                    <li><a href="#faq">SSS</a></li>
+                    <li><a href="./privacy-policy.html">Gizlilik</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener" class="btn-playstore-nav">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.793 12 3.61 22.186a2.38 2.38 0 0 1-.61-1.636V3.45c0-.623.228-1.206.609-1.636zM15.207 13.414l2.572 2.572-12.753 7.362 10.181-9.934zm0-2.828L5.026.652 17.78 8.014l-2.573 2.572zm1.414 1.414l3.197-1.846c1.077-.622 1.077-1.638 0-2.26l-3.197-1.846-2.122 2.121 2.122 2.121z"/>
+                        </svg>
+                        Google Play'de İncele
+                    </a>
+
+                    <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Menü">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <a href="#features" class="mobile-nav-link">Özellikler</a>
+        <a href="#how-to-play" class="mobile-nav-link">Nasıl Oynanır?</a>
+        <a href="#categories" class="mobile-nav-link">Kategoriler</a>
+                <a href="#reviews" class="mobile-nav-link">Mağaza & Yorumlar</a>
+        <a href="#faq" class="mobile-nav-link">Sıkça Sorulanlar</a>
+        <a href="./privacy-policy.html">Gizlilik Politikası</a>
+        <a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener" class="btn-google-play" style="margin-top: 10px;">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3.609 1.814L13.793 12 3.61 22.186a2.38 2.38 0 0 1-.61-1.636V3.45c0-.623.228-1.206.609-1.636zM15.207 13.414l2.572 2.572-12.753 7.362 10.181-9.934zm0-2.828L5.026.652 17.78 8.014l-2.573 2.572zm1.414 1.414l3.197-1.846c1.077-.622 1.077-1.638 0-2.26l-3.197-1.846-2.122 2.121 2.122 2.121z"/>
+            </svg>
+            <div>
+                <span class="btn-sub">Hemen İndir</span>
+                <span class="btn-main">Google Play Store</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
+                
+                <!-- Left Column: Copy & CTAs -->
+                <div class="hero-content">
+                    <div class="hero-announcement">
+                        <span class="status-dot"></span>
+                        <span>Google Play Store'da Yayında • v2.1.3 • 10+ İndirme</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        Kelime Anlatmanın En Heyecanlı Hali: <br>
+                        <span class="gradient-text">TabuKA</span>
+                    </h1>
+
+                    <p class="hero-lead">
+                        Arkadaş buluşmalarının ve aile partilerinin yeni yıldızı! Cihaz içi <strong>Yapay Zekâ Ses Hakemi</strong>, <strong>2.300+ güncel kelime</strong>, <strong>13 zengin kategori</strong> ve <strong>%100 internetsiz</strong> çevrimdışı moduyla klasik tabu heyecanını zirveye taşıyın.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener" class="btn-google-play">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3.609 1.814L13.793 12 3.61 22.186a2.38 2.38 0 0 1-.61-1.636V3.45c0-.623.228-1.206.609-1.636zM15.207 13.414l2.572 2.572-12.753 7.362 10.181-9.934zm0-2.828L5.026.652 17.78 8.014l-2.573 2.572zm1.414 1.414l3.197-1.846c1.077-.622 1.077-1.638 0-2.26l-3.197-1.846-2.122 2.121 2.122 2.121z"/>
+                            </svg>
+                            <div>
+                                <span class="btn-sub">Google Play'den İndir</span>
+                                <span class="btn-main">ÜCRETSİZ YÜKLE</span>
+                            </div>
+                        </a>
+
+                        <a href="#how-to-play" class="btn-secondary">
+                            <span>🎮 Nasıl Oynanır?</span>
+                        </a>
+                    </div>
+
+                    <div class="hero-trust-bar">
+                        <div class="trust-item">
+                            <span style="font-size: 16px;">🔥</span>
+                            <strong>10+</strong> Aktif İndirme
+                        </div>
+                        <div class="trust-item">
+                            <span style="font-size: 16px;">⭐</span>
+                            Google Play'de İlk Yorumu Sen Yap
+                        </div>
+                        <div class="trust-item">
+                            <span>⚡</span> %100 Çevrimdışı (İnternetsiz)
+                        </div>
+                        <div class="trust-item">
+                            <span>🔒</span> Gizlilik Odaklı Ses AI
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Live Tabu Card -->
+                <div class="hero-showcase">
+                    <div class="interactive-card-wrapper" id="liveTabuCard">
+                        
+                        <!-- Top Bar: Category & Score -->
+                        <div class="card-top-bar">
+                            <span class="category-chip" id="cardCategory">
+                                🤖 Teknoloji & Bilim
+                            </span>
+                            <div class="score-pill">
+                                Takım A: <span id="cardScore">0</span> Puan
+                            </div>
+                        </div>
+
+                        <!-- Animated Timer Ring -->
+                        <div class="timer-container">
+                            <svg class="timer-svg" viewBox="0 0 80 80">
+                                <circle class="timer-bg" cx="40" cy="40" r="34"></circle>
+                                <circle class="timer-progress" id="timerCircle" cx="40" cy="40" r="34"></circle>
+                            </svg>
+                            <span class="timer-seconds" id="timerSeconds">45</span>
+                        </div>
+
+                        <!-- Main Word Box -->
+                        <div class="main-word-box">
+                            <div class="main-word-label">ANLATILACAK KELİME</div>
+                            <div class="main-word-text" id="cardMainWord">YAPAY ZEKA</div>
+                        </div>
+
+                        <!-- Forbidden / Taboo Words -->
+                        <div class="forbidden-list" id="forbiddenList">
+                            <div class="forbidden-word">Robot</div>
+                            <div class="forbidden-word">Bilgisayar</div>
+                            <div class="forbidden-word">Gelecek</div>
+                            <div class="forbidden-word">Teknoloji</div>
+                            <div class="forbidden-word">Akıl</div>
+                        </div>
+
+                        <!-- Buttons Grid -->
+                        <div class="game-actions-grid">
+                            <button class="btn-game btn-correct" id="btnCorrect">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                <span>DOĞRU (+1)</span>
+                            </button>
+                            <button class="btn-game btn-pass" id="btnPass">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+                                <span>PAS (0)</span>
+                            </button>
+                            <button class="btn-game btn-taboo" id="btnTaboo">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <span>TABU (-1)</span>
+                            </button>
+                        </div>
+
+                        <div class="demo-hint">
+                            <span>👆</span> Butonlara basarak kartı canlı deneyin!
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
+    </section>
 
-        <div class="footer-links">
-            <a href="/app-ads.txt" target="_blank">app-ads.txt</a>
-            <a href="#">Gizlilik Politikası</a>
-            <a href="mailto:iletisim@adresiniz.com">İletişim</a>
+    <!-- Stats Bar -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number gradient-text">10+</div>
+                    <div class="stat-label">Google Play İndirme</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number purple-gradient-text">2.346+</div>
+                    <div class="stat-label">Özgün Tabu Kelimesi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #10B981;">13</div>
+                    <div class="stat-label">Kategori Paketi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: #F59E0B;">%100</div>
+                    <div class="stat-label">Çevrimdışı (Offline)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number gradient-text">v2.1.3</div>
+                    <div class="stat-label">Güncel Kararlı Sürüm</div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">YENİLİKÇİ ÖZELLİKLER</span>
+                <h2 class="section-title">Neden TabuKA?</h2>
+                <p class="section-subtitle">Geleneksel kutu oyununun sınırlarını aşan modern bir Tabu deneyimi.</p>
+            </div>
+
+            <div class="features-grid">
+                
+                <!-- Feature 1 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-flame">
+                        🎙️
+                    </div>
+                    <h3 class="feature-title">Yapay Zekâ Sesli Hakem</h3>
+                    <p class="feature-desc">
+                        Cihaz içi <strong>Vosk AI</strong> motoruyla konuşmaları gerçek zamanlı dinler. Yasaklı kelime ağzınızdan kaçtığı anda otomatik düdük çalar ve Tabu cezasını yazar! Sesiniz asla internete gitmez.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-green">
+                        📴
+                    </div>
+                    <h3 class="feature-title">%100 Çevrimdışı Oynanış</h3>
+                    <p class="feature-desc">
+                        İnternet kotanız bittiğinde, uçakta seyahat ederken, ormanda kampta veya plaj partisinde bağlantı gerekmeden kesintisiz eğlenmeye devam edin.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-purple">
+                        📚
+                    </div>
+                    <h3 class="feature-title">13 Zengin Kategori</h3>
+                    <p class="feature-desc">
+                        Futbol Arenası, 90'lar Nostaljisi, Dizi & Film Replikleri, Parti Gecesi, Teknoloji ve Genel Kültür gibi arkadaş grubunuza en uygun paketleri seçin veya karıştırın.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-amber">
+                        ✏️
+                    </div>
+                    <h3 class="feature-title">Özel Kelime Editörü</h3>
+                    <p class="feature-desc">
+                        Arkadaş grubunuzun kendi aralarındaki esprileri, unutulmaz anıları veya dilediğiniz yeni kelimeleri kolayca uygulamaya ekleyin ve kendi kartlarınızla oynayın!
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-pink">
+                        👥
+                    </div>
+                    <h3 class="feature-title">2 - 6 Takım Desteği</h3>
+                    <p class="feature-desc">
+                        Kalabalık aile ve arkadaş buluşmaları için esnek takım kurulumu! Özel takım isimleri, tur süresi (30-180 sn), pas limiti ve hedef puanı özgürce belirleyin.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-box">
+                    <div class="feature-icon-wrapper icon-blue">
+                        🎨
+                    </div>
+                    <h3 class="feature-title">Çarpıcı VIP Temalar</h3>
+                    <p class="feature-desc">
+                        Gece Partisi, Neon, Sıcak & Eğlenceli, Retro Arcade ve Masa Oyunu gibi şık temalarla oyunun görsel atmosferini tek dokunuşla dilediğiniz gibi değiştirin.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Play Section -->
+    <section class="rules-section" id="how-to-play">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">KOLAY REHBER</span>
+                <h2 class="section-title">Nasıl Oynanır?</h2>
+                <p class="section-subtitle">Sadece 3 adımda oyunu başlatın ve arkadaşlarınızla yarışın.</p>
+            </div>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="step-number">1</div>
+                    <h3 class="rule-title">Takımını Kur & Süreyi Seç</h3>
+                    <p class="rule-desc">
+                        2 ile 6 arasında takım oluşturun, takım isimlerinizi belirleyin. Tur süresini (örn. 60 saniye) ve pas hakkınızı ayarlayarak oyunu başlatın.
+                    </p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="step-number">2</div>
+                    <h3 class="rule-title">Yasaklı Kelimelere Dikkat Et!</h3>
+                    <p class="rule-desc">
+                        En üstteki ana kelimeyi, altındaki 5 yasaklı kelimeyi ve bunların köklerini kullanmadan takım arkadaşlarınıza anlatın. Tabu yaparsanız puanınız düşer!
+                    </p>
+                </div>
+
+                <div class="rule-card">
+                    <div class="step-number">3</div>
+                    <h3 class="rule-title">Skoru Topla, Şampiyon Ol</h3>
+                    <p class="rule-desc">
+                        Doğru bilinen her kelime için +1 puan kazanın. Süre bittiğinde sıra rakip takıma geçer. Belirlenen hedef skora ilk ulaşan takım kazanır!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Showcase -->
+    <section class="categories-section" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">2.300+ KELİME HAVUZU</span>
+                <h2 class="section-title">13 Özel Kategori</h2>
+                <p class="section-subtitle">Her ilgi alanına ve arkadaş grubuna uygun zengin kelime koleksiyonu.</p>
+            </div>
+
+            <div class="categories-chips-wrap">
+                <div class="cat-chip"><span class="emoji">⚽</span> Futbol Arenası <span class="count">190+</span></div>
+                <div class="cat-chip"><span class="emoji">🎬</span> Dizi - Film Replikleri <span class="count">210+</span></div>
+                <div class="cat-chip"><span class="emoji">📼</span> 90'lar Nostaljisi <span class="count">200+</span></div>
+                <div class="cat-chip"><span class="emoji">🥳</span> Parti Gecesi <span class="count">230+</span></div>
+                <div class="cat-chip"><span class="emoji">💻</span> Teknoloji & Bilim <span class="count">190+</span></div>
+                <div class="cat-chip"><span class="emoji">🌍</span> Doğa & Coğrafya <span class="count">180+</span></div>
+                <div class="cat-chip"><span class="emoji">🦁</span> Hayvanlar Âlemi <span class="count">170+</span></div>
+                <div class="cat-chip"><span class="emoji">🍕</span> Yiyecek & İçecek <span class="count">180+</span></div>
+                <div class="cat-chip"><span class="emoji">🏛️</span> Şehirler & Gezi <span class="count">190+</span></div>
+                <div class="cat-chip"><span class="emoji">💼</span> Meslekler & Roller <span class="count">140+</span></div>
+                <div class="cat-chip"><span class="emoji">🏃</span> Spor Dünyası <span class="count">130+</span></div>
+                <div class="cat-chip"><span class="emoji">⚡</span> Eylemler & Hareket <span class="count">80+</span></div>
+                <div class="cat-chip"><span class="emoji">🧠</span> Genel Kültür <span class="count">240+</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Google Play Store Status & Reviews Section -->
+    <section class="reviews-section" id="reviews">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">GOOGLE PLAY CANLI VERİLERİ</span>
+                <h2 class="section-title">Mağaza Durumu & Değerlendirmeler</h2>
+                <p class="section-subtitle">TabuKA Google Play Store'da resmi olarak yayında! Canlı mağaza istatistikleri ve oyuncu deneyimleri.</p>
+            </div>
+
+            <!-- Live Play Store Info Grid -->
+            <div class="store-info-grid">
+                
+                <div class="store-data-card">
+                    <div class="store-card-header">
+                        <img src="./Assets/logo-mark.png" alt="TabuKA" class="store-card-icon">
+                        <div>
+                            <div class="store-app-title">TabuKA</div>
+                            <div class="store-app-dev">Geliştirici: Kürşad ARAS (muvkors)</div>
+                        </div>
+                        <span class="store-live-badge">🟢 Yayında</span>
+                    </div>
+
+                    <div class="store-metrics-row">
+                        <div class="store-metric-item">
+                            <div class="store-metric-val gradient-text">10+</div>
+                            <div class="store-metric-lbl">Aktif İndirme</div>
+                        </div>
+                        <div class="store-metric-item">
+                            <div class="store-metric-val purple-gradient-text">v2.1.3</div>
+                            <div class="store-metric-lbl">Güncel Sürüm</div>
+                        </div>
+                        <div class="store-metric-item">
+                            <div class="store-metric-val" style="color: #10B981;">PEGI 3</div>
+                            <div class="store-metric-lbl">Her Yaşa Uygun</div>
+                        </div>
+                        <div class="store-metric-item">
+                            <div class="store-metric-val" style="color: #F59E0B;">Ücretsiz</div>
+                            <div class="store-metric-lbl">Google Play</div>
+                        </div>
+                    </div>
+
+                    <div class="store-notice-box">
+                        <div class="notice-icon">📢</div>
+                        <div class="notice-text">
+                            <strong>Google Play Store Durumu:</strong> TabuKA 5 Kasım 2026 itibarıyla kararlı sürümüyle mağazada yerini aldı. Genel kullanıcı puanları ve yorumları Google Play tarafından toplanma aşamasındadır. Oyunu ilk deneyenlerden biri olup mağazada ilk yorumu ve 5 yıldızlı puanı bırakabilirsiniz!
+                        </div>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener" class="btn-playstore-nav" style="display: inline-flex;">
+                            ⭐ Google Play'de Oy Ver & İlk Yorumu Yaz
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Community / Test Reviews Grid -->
+                <div class="community-reviews-col">
+                    <div class="review-quote-card">
+                        <div class="quote-stars">★★★★★</div>
+                        <p class="quote-text">"Yapay zeka sesli hakem modu gerçekten devrim! Partide kimse 'ben o kelimeyi söylemedim' diyemiyor, otomatik düdüğü çalıyor. Eğlenceyi ikiye katladı."</p>
+                        <div class="quote-author">
+                            <div class="quote-avatar">AK</div>
+                            <div>
+                                <div class="author-name">Ali K.</div>
+                                <div class="author-role">Beta Test Oyuncusu • Android</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-quote-card">
+                        <div class="quote-stars">★★★★★</div>
+                        <p class="quote-text">"İnternetsiz çalışması yolculukta hayat kurtardı. 90'lar nostalji ve futbol paketleri çok iyi düşünülmüş. Kelime haznesi çok geniş, kartlar tekrara düşmüyor."</p>
+                        <div class="quote-author">
+                            <div class="quote-avatar">ST</div>
+                            <div>
+                                <div class="author-name">Selin T.</div>
+                                <div class="author-role">Erken Erişim Oyuncusu • Android</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-quote-card">
+                        <div class="quote-stars">★★★★★</div>
+                        <p class="quote-text">"Arayüz ve kart geçişleri yağ gibi akıyor. Özel kelime ekleme özelliğiyle kendi aramızdaki esprileri de oyuna kattık, ailece bayıldık."</p>
+                        <div class="quote-author">
+                            <div class="quote-avatar">BD</div>
+                            <div>
+                                <div class="author-name">Burak D.</div>
+                                <div class="author-role">Test Kullanıcısı • Android</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Download CTA Banner -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-banner">
+                
+                <div class="cta-content">
+                    <h2 class="cta-title">
+                        Hemen Yükleyin, Eğlenceyi Başlatın!
+                    </h2>
+                    <p class="cta-text">
+                        TabuKA Google Play Store'da ücretsiz olarak yayında. Takımını topla, kelimeleri anlat ve yapay zekâ hakemle en adil tabu maçını yaşa!
+                    </p>
+
+                    <div class="cta-actions">
+                        <a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener" class="btn-google-play">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3.609 1.814L13.793 12 3.61 22.186a2.38 2.38 0 0 1-.61-1.636V3.45c0-.623.228-1.206.609-1.636zM15.207 13.414l2.572 2.572-12.753 7.362 10.181-9.934zm0-2.828L5.026.652 17.78 8.014l-2.573 2.572zm1.414 1.414l3.197-1.846c1.077-.622 1.077-1.638 0-2.26l-3.197-1.846-2.122 2.121 2.122 2.121z"/>
+                            </svg>
+                            <div>
+                                <span class="btn-sub">Paket Adı: com.tabuka.arena</span>
+                                <span class="btn-main">Google Play'den İndir</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cta-qr-box">
+                    <div class="qr-image-wrapper">
+                        <img src="./Assets/playstore_qr.png" alt="Google Play İndirme QR Kodu">
+                    </div>
+                    <div class="qr-caption">Kameranla Tara</div>
+                    <div class="qr-sub">Telefona anında yükle</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">MERAK EDİLENLER</span>
+                <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+                <p class="section-subtitle">TabuKA hakkında aklınıza takılabilecek tüm soruların yanıtları.</p>
+            </div>
+
+            <div class="faq-accordion">
+                
+                <div class="faq-item active">
+                    <div class="faq-header">
+                        <span>TabuKA oynamak için internet bağlantısı gerekir mi?</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="faq-content">
+                        <strong>Hayır, gerekmez.</strong> TabuKA tamamen çevrimdışı (offline) çalışacak şekilde tasarlanmıştır. Tüm kelime veritabanı ve yapay zekâ sesli hakem motoru cihazınızda yerel olarak çalışır. Uçakta, dağda, kampta internetiniz olmadan rahatça oynayabilirsiniz.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Sesli Hakem konuşmalarımı kaydediyor veya sunucuya gönderiyor mu?</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="faq-content">
+                        <strong>Kesinlikle hayır.</strong> Ses tanıma işlemi cihazınızda yerel olarak çalışan açık kaynaklı Vosk AI modeli tarafından gerçekleştirilir. Mikrofon verisi hiçbir zaman sunuculara iletilmez, kaydedilmez ve depolanmaz. Gizliliğiniz %100 güvendedir.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Kaç kişiyle ve kaç takımla oynanabilir?</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="faq-content">
+                        TabuKA 2'den 6'ya kadar takım oluşturmanıza olanak tanır. Her takımda dilediğiniz sayıda oyuncu bulunabilir; böylece ister 4 kişilik samimi bir buluşmada, ister 20+ kişilik kalabalık bir ev partisinde rahatça oynayabilirsiniz.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Kendi kelimelerimizi oyuna ekleyebilir miyiz?</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="faq-content">
+                        <strong>Evet!</strong> TabuKA dahili bir "Kelime Yönetimi" modülüne sahiptir. Arkadaş ortamınıza veya ailenize özel şakaları, anıları ve kelimeleri 5 yasaklı sözcüğüyle birlikte ekleyebilir ve oyuna anında dahil edebilirsiniz.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-header">
+                        <span>Uygulama ücretli mi?</span>
+                        <svg class="faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                    </div>
+                    <div class="faq-content">
+                        TabuKA Google Play Store'da <strong>tamamen ücretsiz</strong> olarak indirilebilir. Temel kelimeler ve kategoriler hemen oynanabilir durumdadır. Dileyen kullanıcılar için ek tematik paketler ve tek seferlik VIP paket seçenekleri mevcuttur.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                
+                <div class="footer-brand">
+                    <a href="#" class="brand-logo-group">
+                        <img src="./Assets/logo-mark.png" alt="TabuKA" class="brand-icon">
+                        <span class="brand-name gradient-text">TabuKA</span>
+                    </a>
+                    <p>
+                        Arkadaş buluşmalarının ve ev partilerinin yeni nesil kelime anlatma oyunu. Cihaz içi yapay zekâ sesli hakem, zengin kelime arşivi ve çevrimdışı oynanış.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Hızlı Bağlantılar</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Özellikler</a></li>
+                        <li><a href="#how-to-play">Nasıl Oynanır?</a></li>
+                        <li><a href="#categories">Kategoriler</a></li>
+                                                <li><a href="#reviews">Mağaza & Yorumlar</a></li>
+                        <li><a href="#faq">Sıkça Sorulanlar</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Yasal & Mağaza</h4>
+                    <ul class="footer-links">
+                        <li><a href="./privacy-policy.html">Gizlilik Politikası (Privacy Policy)</a></li>
+                        <li><a href="https://play.google.com/store/apps/details?id=com.tabuka.arena" target="_blank" rel="noopener">Google Play Store</a></li>
+                        <li><a href="mailto:kursad.aras@gmail.com">İletişim & Destek</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    &copy; 2026 TabuKA • Geliştirici: <strong>Kürşad ARAS</strong>. Tüm hakları saklıdır.
+                </div>
+                <div>
+                    Paket: <code style="color: var(--brand-flame-1);">com.tabuka.arena</code> • .NET 10 & Avalonia UI
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interactions -->
+    <script>
+        // Sample Tabu Cards for Interactive Hero Demo
+        const sampleCards = [
+            {
+                category: "🤖 Teknoloji & Bilim",
+                mainWord: "YAPAY ZEKA",
+                forbidden: ["Robot", "Bilgisayar", "Gelecek", "Teknoloji", "Akıl"]
+            },
+            {
+                category: "⚽ Futbol Arenası",
+                mainWord: "OFSAYT",
+                forbidden: ["Hakem", "Çizgi", "Pas", "İleri", "Gol"]
+            },
+            {
+                category: "🎬 Dizi & Film",
+                mainWord: "POPCORN",
+                forbidden: ["Sinema", "Mısır", "Patlatmak", "Film", "Kova"]
+            },
+            {
+                category: "🥳 Parti Gecesi",
+                mainWord: "KARAOKE",
+                forbidden: ["Şarkı", "Mikrofon", "Müzik", "Söylemek", "Ekran"]
+            },
+            {
+                category: "🍕 Yiyecek & İçecek",
+                mainWord: "KAHVE",
+                forbidden: ["Fincan", "Kafein", "Sıcak", "Türk", "Sabah"]
+            },
+            {
+                category: "📼 90'lar Nostaljisi",
+                mainWord: "ATARİ",
+                forbidden: ["Kaset", "Oyun", "Mario", "Televizyon", "Kol"]
+            }
+        ];
+
+        let currentCardIndex = 0;
+        let currentScore = 0;
+        let timerSeconds = 45;
+        let timerInterval = null;
+
+        const cardCategoryEl = document.getElementById('cardCategory');
+        const cardMainWordEl = document.getElementById('cardMainWord');
+        const forbiddenListEl = document.getElementById('forbiddenList');
+        const cardScoreEl = document.getElementById('cardScore');
+        const timerSecondsEl = document.getElementById('timerSeconds');
+        const timerCircleEl = document.getElementById('timerCircle');
+        const liveTabuCardEl = document.getElementById('liveTabuCard');
+
+        function loadCard(index) {
+            const card = sampleCards[index];
+            cardCategoryEl.textContent = card.category;
+            cardMainWordEl.textContent = card.mainWord;
+
+            forbiddenListEl.innerHTML = '';
+            card.forbidden.forEach(word => {
+                const div = document.createElement('div');
+                div.className = 'forbidden-word';
+                div.textContent = word;
+                forbiddenListEl.appendChild(div);
+            });
+        }
+
+        function triggerFlash(type) {
+            liveTabuCardEl.classList.remove('flash-correct', 'flash-taboo');
+            void liveTabuCardEl.offsetWidth; // trigger reflow
+            if (type === 'correct') {
+                liveTabuCardEl.classList.add('flash-correct');
+            } else if (type === 'taboo') {
+                liveTabuCardEl.classList.add('flash-taboo');
+            }
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % sampleCards.length;
+            loadCard(currentCardIndex);
+        }
+
+        // Gameplay Buttons
+        document.getElementById('btnCorrect').addEventListener('click', () => {
+            currentScore += 1;
+            cardScoreEl.textContent = currentScore;
+            triggerFlash('correct');
+            nextCard();
+        });
+
+        document.getElementById('btnTaboo').addEventListener('click', () => {
+            currentScore = Math.max(0, currentScore - 1);
+            cardScoreEl.textContent = currentScore;
+            triggerFlash('taboo');
+            nextCard();
+        });
+
+        document.getElementById('btnPass').addEventListener('click', () => {
+            nextCard();
+        });
+
+        // Simple Countdown Timer simulation
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                if (timerSeconds <= 0) {
+                    timerSeconds = 45;
+                }
+                timerSecondsEl.textContent = timerSeconds;
+
+                // Circular Progress (circumference 213)
+                const offset = 213 - (213 * (timerSeconds / 45));
+                timerCircleEl.style.strokeDashoffset = offset;
+
+                // Color change in last 10 seconds
+                if (timerSeconds <= 10) {
+                    timerCircleEl.style.stroke = '#EF4444';
+                } else {
+                    timerCircleEl.style.stroke = 'var(--brand-flame-1)';
+                }
+            }, 1000);
+        }
+
+        startTimer();
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const wasActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.toggle('open');
+        });
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileDrawer.classList.remove('open');
+            });
+        });
+
+            </script>
 </body>
 </html>
